@@ -20,7 +20,9 @@ command_not_found_handler()
 				install) sudo pacman -S $PKGS ;;
 				info) pacman -Si $PKGS; prompt_install;;
 				'list files') pacman -Flq $PKGS; echo; prompt_install;;
-				'list files (paged)') pacman -Flq $PKGS | less; prompt_install;;
+				'list files (paged)') [[ -z $PAGER ]] && local PAGER=less
+					pacman -Flq $PKGS | $PAGER
+					prompt_install ;;
 				*) echo; return 127
 			esac
 	;;
