@@ -1,0 +1,10 @@
+[Unit]
+Description=pacman files database update
+RequiresMountsFor=/var/lib/pacman/sync
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pacman -Fy
+Nice=19
+StandardOutput=journal
+StandardError=journal
