@@ -1,7 +1,7 @@
 command_not_found_handle() 
 {
 	local CMD=$1
-	local PKGS=$(pm -Foq /usr/bin/$CMD 2> /dev/null)
+	local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
 	case $(echo $PKGS | wc -w) in
 		0) echo "$0: $CMD: command not found"
 			return 127 ;;
