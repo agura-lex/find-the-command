@@ -3,7 +3,7 @@ command_not_found_handle()
 	local CMD=$1 
 	local PKGS=$(pm -Foq /usr/bin/$CMD 2> /dev/null)
 	case $(echo $PKGS | wc -w) in
-		0) echo "$0: command \"$CMD\" not found"
+		0) echo "$0: $CMD: command not found"
 			return 127 ;;
 		1) local ACT PS3="Action (0 to abort): " 
 			echo -e "\n\"$CMD\" may be found in package \"$PKGS\"\n"
