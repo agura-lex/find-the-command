@@ -7,6 +7,7 @@ command_not_found_handle()
 			return 127 ;;
 		1) printf "\"$CMD\" may be found in package \"$PKGS\"\n" ;;
 		*)
+			local PKG
 			printf "\"$CMD\" may be found in the following packages:\n"
 			for PKG in `echo -n $PKGS`
 			do
