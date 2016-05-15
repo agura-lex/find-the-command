@@ -10,10 +10,10 @@ Ineractive shells have an ability to run a specified function when entered comma
 
 # Installation
 
-git clone https://aur.archlinux.org/find-the-command.git
-cd find-the-command
-makepkg -si
+	git clone https://aur.archlinux.org/find-the-command.git
+	cd find-the-command
+	makepkg -si
 
 Alternatively, you can use yaourt:
 
-yaourt -S find-the-command
+	yaourt -S find-the-command
