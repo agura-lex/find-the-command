@@ -29,3 +29,9 @@ It is also necessary to create pacman files database:
 There is also systemd timer included to update pacman files database on daily basis, so you don't need to worry about it, just run once the following:
 
 	# systemctl enable pacman-files.timer
+
+## Screenshots
+[Screenshot](http://i.imgur.com/fFPqn7i.png)
+[Screenshot](http://i.imgur.com/A5ahFFO.png)
+[Non-interactive](http://i.imgur.com/pIHbKEK.png)
+
