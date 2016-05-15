@@ -17,3 +17,11 @@ Ineractive shells have an ability to run a specified function when entered comma
 Alternatively, you can use yaourt:
 
 	yaourt -S find-the-command
+
+To enable it, you need to source needed file from `/usr/share/doc/find-the-command` directory. For example, to enable interactive zsh hook, you need to place the following in your `~/.zshrc`:
+
+	source /usr/share/doc/find-the-command/ftc-interactive.zsh
+
+It is also necessary to create pacman files database:
+
+	# pacman -Fy
