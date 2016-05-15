@@ -32,6 +32,6 @@ command_not_found_handler()
 			select PKG in `echo -n $PKGS`
 			do break
 			done
-			[[ -n $PKG ]] && s pm -S $PKG || return 127
+			[[ -n $PKG ]] && sudo pacman -S $PKG || return 127
 	esac
 }
