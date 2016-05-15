@@ -6,7 +6,7 @@ For now, there are only bash and zsh hooks. I am not familiar with fish, so ther
 
 ## How does it work?
 
-Ineractive shells have an ability to run a specified function when entered command is not found. So these hooks contain a simple function, which is run when shell fails to find any local executables in PATH, aliases and functions, matching entered command. There are both interactive hooks, which are providing installation prompt and some other useful functionality (like showing info about package), and non-interactive, which are only displaying a package (or list of packages) that provides needed command.
+Interactive shells have an ability to run a specified function when entered command is not found. So these hooks contain a simple function, which is run when shell fails to find any local executables in PATH, aliases and functions, matching entered command. There are both interactive hooks, which are providing installation prompt and some other useful functionality (like showing info about package), and non-interactive, which are only displaying a package (or list of packages) that provides needed command.
 
 ## Installation
 
