@@ -31,7 +31,7 @@ There is also systemd timer included to update pacman files database on daily ba
 	# systemctl enable pacman-files.timer
 
 ## Screenshots
-[Screenshot](http://i.imgur.com/fFPqn7i.png)
-[Screenshot](http://i.imgur.com/A5ahFFO.png)
-[Non-interactive](http://i.imgur.com/pIHbKEK.png)
+![Screenshot](http://i.imgur.com/fFPqn7i.png)
+![Screenshot](http://i.imgur.com/A5ahFFO.png)
+![Non-interactive](http://i.imgur.com/pIHbKEK.png)
 
