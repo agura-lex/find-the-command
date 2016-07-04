@@ -17,6 +17,7 @@ then
 		esac
 	}
 else
+	echo $* | grep -q 'su' && _asroot() (su -c "$*") || _asroot() (sudo $*)
 	command_not_found_handler(){
 		local CMD=$1
 		local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
@@ -26,7 +27,7 @@ else
 				local ACT PS3="Action (0 to abort): "
 				local prompt_install(){
 					echo -n "Would you like to install this package? (y|n) "
-				read -q && (echo;sudo pacman -S $PKGS) || (echo; return 127)
+				read -q && (echo;_asroot pacman -S $PKGS) || (echo; return 127)
 				}
 				echo "\n\"$CMD\" may be found in package \"$PKGS\"\n"
 				echo "What would you like to do? "
@@ -34,7 +35,7 @@ else
 				do break
 				done
 				case $ACT in
-					install) sudo pacman -S $PKGS ;;
+					install) _asroot pacman -S $PKGS ;;
 					info) pacman -Si $PKGS; prompt_install;;
 					'list files') pacman -Flq $PKGS; echo; prompt_install;;
 					'list files (paged)') [[ -z $PAGER ]] && local PAGER=less
@@ -49,7 +50,7 @@ else
 				select PKG in `echo -n $PKGS`
 				do break
 				done
-				[[ -n $PKG ]] && sudo pacman -S $PKG || return 127
+				[[ -n $PKG ]] && _asroot pacman -S $PKG || return 127
 		esac
 	}
 fi
