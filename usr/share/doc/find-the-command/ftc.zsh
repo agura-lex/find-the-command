@@ -17,7 +17,10 @@ then
 		esac
 	}
 else
-	echo $* | grep -q 'su' && _asroot() (su -c "$*") || _asroot() (sudo $*)
+	if echo $* | grep -q 'su'
+	then _asroot() { [[ $EUID == 0 ]] && su -c "$*"; }
+	else _asroot() { [[ $EUID == 0 ]] && sudo $*; }
+	fi
 	command_not_found_handler(){
 		local CMD=$1
 		local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
