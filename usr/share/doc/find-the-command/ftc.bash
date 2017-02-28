@@ -19,7 +19,7 @@ then
 else
 	if echo $* | grep -q 'su'
 	then _asroot() { su -c "$*"; }
-        else _asroot() { sudo $*; }
+	else _asroot() { sudo $*; }
 	fi
 	command_not_found_handle() {
 		local CMD=$1
