@@ -17,9 +17,13 @@ then
 		esac
 	}
 else
-	if echo $* | grep -q 'su'
-	then _asroot() { su -c "$*"; }
-	else _asroot() { sudo $*; }
+	if [[ $EUID == 0 ]]
+	then _asroot(){ $*; }
+	else
+		if $* | grep -q 'su'
+		then _asroot() { su -c "$*"; }
+		else _asroot() { sudo $*; }
+		fi
 	fi
 	command_not_found_handler(){
 		local CMD=$1
