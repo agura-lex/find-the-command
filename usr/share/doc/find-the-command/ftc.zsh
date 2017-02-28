@@ -18,8 +18,8 @@ then
 	}
 else
 	if echo $* | grep -q 'su'
-	then _asroot() { [[ $EUID == 0 ]] && su -c "$*"; }
-	else _asroot() { [[ $EUID == 0 ]] && sudo $*; }
+	then _asroot() { su -c "$*"; }
+	else _asroot() { sudo $*; }
 	fi
 	command_not_found_handler(){
 		local CMD=$1
