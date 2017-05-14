@@ -18,8 +18,13 @@ then
     _pre_search_warn(){
         _cnf_print "find-the-command: \"$CMD\" is not found locally, searching in repositories..." 
     }
+    _cnf_cmd_not_found(){
+        _cnf_print "find-the-command: command not found: $CMD"
+        return 127
+    }
 else
     _pre_search_warn(){ : Do nothing; }
+    _cnf_cmd_not_found(){ return 127; }
 fi
 
 # Without installation prompt
@@ -30,8 +35,7 @@ then
         _pre_search_warn
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
-            0) _cnf_print "$0: $CMD: command not found"
-                return 127 ;;
+            0) _cnf_cmd_not_found ;;
             1) _cnf_print "\"$CMD\" may be found in package \"$PKGS\"" ;;
             *)
                 local PKG
@@ -57,7 +61,7 @@ else
         _pre_search_warn
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
-            0) return 127 ;;
+            0) _cnf_cmd_not_found ;;
             1)
                 local ACT PS3="Action (0 to abort): "
                 local prompt_install(){
