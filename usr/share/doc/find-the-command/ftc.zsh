@@ -5,17 +5,29 @@ alias _cnf_print='echo -e 1>&2'
 for opt in $*
 do
     case $opt in
-        noprompt) noprompt=1 ;;
-        su) force_su=1 ;;
+        noprompt) cnf_noprompt=1 ;;
+        su) cnf_force_su=1 ;;
+        quite) cnf_verbose=0 ;;
         *) _cnf_print "find-the-command: unknown option: $opt"
     esac
 done
 
+# Don't show pre-search warning if 'quite' option is not set
+if [[ $cnf_verbose != 0 ]]
+then
+    _pre_search_warn(){
+        _cnf_print "find-the-command: \"$CMD\" is not found locally, searching in repositories..." 
+    }
+else
+    _pre_search_warn(){ : Do nothing; }
+fi
+
 # Without installation prompt
-if [[ $noprompt == 1 ]]
+if [[ $cnf_noprompt == 1 ]]
 then
     command_not_found_handler(){
         local CMD=$1
+        _pre_search_warn
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
             0) _cnf_print "$0: $CMD: command not found"
@@ -35,13 +47,14 @@ else
     if [[ $EUID == 0 ]]
     then _asroot(){ $*; }
     else
-        if [[ $force_su == 1 ]]
+        if [[ $cnf_force_su == 1 ]]
         then _asroot() { su -c "$*"; }
         else _asroot() { sudo $*; }
         fi
     fi
     command_not_found_handler(){
         local CMD=$1
+        _pre_search_warn
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
             0) return 127 ;;
@@ -78,4 +91,4 @@ else
 fi
 
 # Clean up environment
-unset opt force_su noprompt
+unset opt cnf_force_su cnf_noprompt cnf_verbose
