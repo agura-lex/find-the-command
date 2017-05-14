@@ -1,4 +1,15 @@
-if echo $* | grep -q 'noprompt'
+# Parse options
+for opt in $*
+do
+    case $opt in
+        noprompt) noprompt=1 ;;
+        su) force_su=1 ;;
+        *) echo "find-the-command: unknown option: $opt"
+    esac
+done
+
+# Without installation prompt
+if [[ $noprompt == 1 ]]
 then
     command_not_found_handler(){
         local CMD=$1
@@ -17,10 +28,11 @@ then
         esac
     }
 else
+# With installation prompt (default)
     if [[ $EUID == 0 ]]
     then _asroot(){ $*; }
     else
-        if $* | grep -q 'su'
+        if [[ $force_su == 1 ]]
         then _asroot() { su -c "$*"; }
         else _asroot() { sudo $*; }
         fi
@@ -61,3 +73,6 @@ else
         esac
     }
 fi
+
+# Clean up environment
+unset opt force_su noprompt
