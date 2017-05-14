@@ -1,10 +1,13 @@
+# Print to stderr
+alias _cnf_print='echo -e 1>&2'
+
 # Parse options
 for opt in $*
 do
     case $opt in
         noprompt) noprompt=1 ;;
         su) force_su=1 ;;
-        *) echo "find-the-command: unknown option: $opt"
+        *) _cnf_print "find-the-command: unknown option: $opt"
     esac
 done
 
@@ -15,15 +18,15 @@ then
         local CMD=$1
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
-            0) echo "$0: $CMD: command not found"
+            0) _cnf_print "$0: $CMD: command not found"
                 return 127 ;;
-            1) printf "\"$CMD\" may be found in package \"$PKGS\"\n" ;;
+            1) _cnf_print "\"$CMD\" may be found in package \"$PKGS\"" ;;
             *)
                 local PKG
-                printf "\"$CMD\" may be found in the following packages:\n"
+                _cnf_print "\"$CMD\" may be found in the following packages:"
                 for PKG in `echo -n $PKGS`
                 do
-                printf "\t$PKG\n"
+                _cnf_print "\t$PKG"
                 done
         esac
     }
@@ -45,27 +48,27 @@ else
             1)
                 local ACT PS3="Action (0 to abort): "
                 local prompt_install(){
-                    echo -n "Would you like to install this package? (y|n) "
-                read -q && (echo;_asroot pacman -S $PKGS) || (echo; return 127)
+                    _cnf_print -n "Would you like to install this package? (y|n) "
+                read -q && (_cnf_print;_asroot pacman -S $PKGS) || (_cnf_print; return 127)
                 }
-                echo "\n\"$CMD\" may be found in package \"$PKGS\"\n"
-                echo "What would you like to do? "
+                _cnf_print "\n\"$CMD\" may be found in package \"$PKGS\"\n"
+                _cnf_print "What would you like to do? "
                 select ACT in 'install' 'info' 'list files' 'list files (paged)'
                 do break
                 done
                 case $ACT in
                     install) _asroot pacman -S $PKGS ;;
                     info) pacman -Si $PKGS; prompt_install;;
-                    'list files') pacman -Flq $PKGS; echo; prompt_install;;
+                    'list files') pacman -Flq $PKGS; _cnf_print; prompt_install;;
                     'list files (paged)') [[ -z $PAGER ]] && local PAGER=less
                         pacman -Flq $PKGS | $PAGER
                         prompt_install ;;
-                    *) echo; return 127
+                    *) _cnf_print; return 127
                 esac
         ;;
             *)
-                local PKG PS3="$(printf "\nSelect a number of package to install (0 to abort): ")"
-                echo "\"$CMD\" may be found in the following packages:\n"
+                local PKG PS3="$(echo -en "\nSelect a number of package to install (0 to abort): ")"
+                _cnf_print "\"$CMD\" may be found in the following packages:\n"
                 select PKG in `echo -n $PKGS`
                 do break
                 done
