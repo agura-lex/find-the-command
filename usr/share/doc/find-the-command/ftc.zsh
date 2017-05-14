@@ -15,7 +15,7 @@ done
 # Don't show pre-search warning if 'quite' option is not set
 if [[ $cnf_verbose != 0 ]]
 then
-    _pre_search_warn(){
+    _cnf_pre_search_warn(){
         _cnf_print "find-the-command: \"$CMD\" is not found locally, searching in repositories..." 
     }
     _cnf_cmd_not_found(){
@@ -23,7 +23,7 @@ then
         return 127
     }
 else
-    _pre_search_warn(){ : Do nothing; }
+    _cnf_pre_search_warn(){ : Do nothing; }
     _cnf_cmd_not_found(){ return 127; }
 fi
 
@@ -32,7 +32,7 @@ if [[ $cnf_noprompt == 1 ]]
 then
     command_not_found_handler(){
         local CMD=$1
-        _pre_search_warn
+        _cnf_pre_search_warn
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
             0) _cnf_cmd_not_found ;;
@@ -49,16 +49,16 @@ then
 else
 # With installation prompt (default)
     if [[ $EUID == 0 ]]
-    then _asroot(){ $*; }
+    then _cnf_asroot(){ $*; }
     else
         if [[ $cnf_force_su == 1 ]]
-        then _asroot() { su -c "$*"; }
-        else _asroot() { sudo $*; }
+        then _cnf_asroot() { su -c "$*"; }
+        else _cnf_asroot() { sudo $*; }
         fi
     fi
     command_not_found_handler(){
         local CMD=$1
-        _pre_search_warn
+        _cnf_pre_search_warn
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
             0) _cnf_cmd_not_found ;;
@@ -66,7 +66,7 @@ else
                 local ACT PS3="Action (0 to abort): "
                 local prompt_install(){
                     _cnf_print -n "Would you like to install this package? (y|n) "
-                read -q && (_cnf_print;_asroot pacman -S $PKGS) || (_cnf_print; return 127)
+                read -q && (_cnf_print;_cnf_asroot pacman -S $PKGS) || (_cnf_print; return 127)
                 }
                 _cnf_print "\n\"$CMD\" may be found in package \"$PKGS\"\n"
                 _cnf_print "What would you like to do? "
@@ -74,7 +74,7 @@ else
                 do break
                 done
                 case $ACT in
-                    install) _asroot pacman -S $PKGS ;;
+                    install) _cnf_asroot pacman -S $PKGS ;;
                     info) pacman -Si $PKGS; prompt_install;;
                     'list files') pacman -Flq $PKGS; _cnf_print; prompt_install;;
                     'list files (paged)') [[ -z $PAGER ]] && local PAGER=less
@@ -89,7 +89,7 @@ else
                 select PKG in `echo -n $PKGS`
                 do break
                 done
-                [[ -n $PKG ]] && _asroot pacman -S $PKG || return 127
+                [[ -n $PKG ]] && _cnf_asroot pacman -S $PKG || return 127
         esac
     }
 fi

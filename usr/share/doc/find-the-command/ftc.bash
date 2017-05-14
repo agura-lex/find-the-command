@@ -15,7 +15,7 @@ done
 # Don't show pre-search warning if 'quite' option is not set
 if [[ $cnf_verbose != 0 ]]
 then
-    _pre_search_warn(){
+    _cnf_pre_search_warn(){
         _cnf_print "find-the-command: \"$CMD\" is not found locally, searching in repositories..." 
     }
 else
@@ -27,7 +27,7 @@ if [[ $cnf_noprompt == 1 ]]
 then
     command_not_found_handle() {
         local CMD=$1
-        _pre_search_warn
+        _cnf_pre_search_warn
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
             0) _cnf_print "$0: $CMD: command not found"
@@ -45,16 +45,16 @@ then
 else
 # With installation prompt (default)
     if [[ $EUID == 0 ]]
-    then _asroot(){ $*; }
+    then _cnf_asroot(){ $*; }
     else
         if [[ $cnf_force_su == 1 ]]
-        then _asroot() { su -c "$*"; }
-        else _asroot() { sudo $*; }
+        then _cnf_asroot() { su -c "$*"; }
+        else _cnf_asroot() { sudo $*; }
         fi
     fi
     command_not_found_handle() {
         local CMD=$1
-        _pre_search_warn
+        _cnf_pre_search_warn
         local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
         case $(echo $PKGS | wc -w) in
             0) _cnf_print "$0: $CMD: command not found"
@@ -67,7 +67,7 @@ else
                 break
                 done
                 case $ACT in
-                    install) _asroot pacman -S $PKGS ;;
+                    install) _cnf_asroot pacman -S $PKGS ;;
                     info) pacman -Si $PKGS ;;
                     'list files') pacman -Flq $PKGS ;;
                     'list files (paged)') [[ -z $PAGER ]] && local PAGER=less
@@ -81,7 +81,7 @@ else
                     do
                     break
                     done
-                    [[ -n $PKG ]] && _asroot pacman -S $PKG || return 127 ;;
+                    [[ -n $PKG ]] && _cnf_asroot pacman -S $PKG || return 127 ;;
         esac
     }
 fi
