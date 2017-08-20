@@ -7,12 +7,12 @@ do
     case $opt in
         noprompt) cnf_noprompt=1 ;;
         su) cnf_force_su=1 ;;
-        quite) cnf_verbose=0 ;;
+        quiet) cnf_verbose=0 ;;
         *) _cnf_print "find-the-command: unknown option: $opt"
     esac
 done
 
-# Don't show pre-search warning if 'quite' option is not set
+# Don't show pre-search warning if 'quiet' option is not set
 if [[ $cnf_verbose != 0 ]]
 then
     _cnf_pre_search_warn(){

@@ -22,9 +22,9 @@ To enable it, you need to source needed file from `/usr/share/doc/find-the-comma
 
 	source /usr/share/doc/find-the-command/ftc.zsh
 
-You can also append some options when sourcing file to customize your experience. For instance, you may add `noprompt` option to disable installation prompt, `quite` to decrease verbosity, or `su` to use 'su' utility instead of 'sudo' to get root access. For example:
+You can also append some options when sourcing file to customize your experience. For instance, you may add `noprompt` option to disable installation prompt, `quiet` to decrease verbosity, or `su` to use 'su' utility instead of 'sudo' to get root access. For example:
 
-	source /usr/share/doc/find-the-command/ftc quite su
+	source /usr/share/doc/find-the-command/ftc quiet su
 
 It is also necessary to create pacman files database:
 
