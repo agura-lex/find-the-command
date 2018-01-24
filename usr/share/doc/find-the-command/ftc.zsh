@@ -75,7 +75,8 @@ else
                 read -q && (_cnf_print;_cnf_asroot pacman -S $PKGS) || (_cnf_print; return 127)
                 }
 
-                if [[ -z $cnf_action ]]; then
+                if [[ -z $cnf_action ]]
+                then
                     _cnf_print "\n\"$CMD\" may be found in package \"$PKGS\"\n"
                     _cnf_print "What would you like to do? "
                     select ACT in $_cnf_actions
