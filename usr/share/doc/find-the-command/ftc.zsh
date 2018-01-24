@@ -82,7 +82,7 @@ else
                     do break
                     done
                 else
-                    _cnf_print ""
+                    _cnf_print
                     ACT=$cnf_action
                 fi
 
