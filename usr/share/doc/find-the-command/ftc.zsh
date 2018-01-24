@@ -82,10 +82,10 @@ else
                     do break
                     done
                 else
-                    _cnf_print
                     ACT=$cnf_action
                 fi
 
+                _cnf_print
                 case $ACT in
                     install) _cnf_asroot pacman -S $PKGS ;;
                     info) pacman -Si $PKGS; prompt_install;;
