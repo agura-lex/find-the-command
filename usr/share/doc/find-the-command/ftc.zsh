@@ -1,6 +1,8 @@
 # Print to stderr
 alias _cnf_print='echo -e 1>&2'
 
+_cnf_actions=('install' 'info' 'list files' 'list files (paged)')
+
 # Parse options
 for opt in $*
 do
@@ -8,6 +10,10 @@ do
         noprompt) cnf_noprompt=1 ;;
         su) cnf_force_su=1 ;;
         quiet) cnf_verbose=0 ;;
+        install) cnf_action=$_cnf_actions[1] ;;
+        info) cnf_action=$_cnf_actions[2] ;;
+        list_files) cnf_action=$_cnf_actions[3] ;;
+        list_files_paged) cnf_action=$_cnf_actions[4] ;;
         *) _cnf_print "find-the-command: unknown option: $opt"
     esac
 done
@@ -68,11 +74,19 @@ else
                     _cnf_print -n "Would you like to install this package? (y|n) "
                 read -q && (_cnf_print;_cnf_asroot pacman -S $PKGS) || (_cnf_print; return 127)
                 }
-                _cnf_print "\n\"$CMD\" may be found in package \"$PKGS\"\n"
-                _cnf_print "What would you like to do? "
-                select ACT in 'install' 'info' 'list files' 'list files (paged)'
-                do break
-                done
+
+                if [[ -z $cnf_action ]]
+                then
+                    _cnf_print "\n\"$CMD\" may be found in package \"$PKGS\"\n"
+                    _cnf_print "What would you like to do? "
+                    select ACT in $_cnf_actions
+                    do break
+                    done
+                else
+                    ACT=$cnf_action
+                fi
+
+                _cnf_print
                 case $ACT in
                     install) _cnf_asroot pacman -S $PKGS ;;
                     info) pacman -Si $PKGS; prompt_install;;

@@ -22,7 +22,19 @@ To enable it, you need to source needed file from `/usr/share/doc/find-the-comma
 
 	source /usr/share/doc/find-the-command/ftc.zsh
 
-You can also append some options when sourcing file to customize your experience. For instance, you may add `noprompt` option to disable installation prompt, `quiet` to decrease verbosity, or `su` to use 'su' utility instead of 'sudo' to get root access. For example:
+You can also append some options when sourcing file to customize your experience.
+
+| Option              | Description                                                                     | Bash | Zsh |
+| ------------------- | ------------------------------------------------------------------------------- |:----:|:---:|
+| `noprompt`          | Disable installation prompt.                                                    | ✓    | ✓   |
+| `quiet`             | Decrese verbosity.                                                              | ✓    | ✓   |
+| `su`                | Always use `su` instead of `sudo`.                                              | ✓    | ✓   |
+| `install`           | Automatically install the package without prompting for action.                 | ✗    | ✓   |
+| `info`              | Automatically print package info without prompting for action.                  | ✗    | ✓   |
+| `list_files`        | Automatically print a list of package files without prompting for action.       | ✗    | ✓   |
+| `list_files_paged`  | Automatically print a paged list of package files without prompting for action. | ✗    | ✓   |
+
+For example:
 
 	source /usr/share/doc/find-the-command/ftc quiet su
 
