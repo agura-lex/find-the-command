@@ -14,9 +14,9 @@ Interactive shells have an ability to run a specified function when entered comm
 	$ cd find-the-command
 	$ makepkg -si
 
-Alternatively, you can use yaourt:
+Alternatively, you can use yay:
 
-	$ yaourt -S find-the-command
+	$ yay -S find-the-command
 
 To enable it, you need to source needed file from `/usr/share/doc/find-the-command` directory according to the shell you use. For example, to enable find-the-command zsh hook, you need to place the following in your `~/.zshrc`:
 
