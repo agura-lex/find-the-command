@@ -3,6 +3,18 @@ alias _cnf_print='echo -e 1>&2'
 
 _cnf_actions=('install' 'info' 'list files' 'list files (paged)')
 
+pacman_files_command(){
+    local CMD=$1
+    local VERSION=$(pacman -Q pacman | awk -F[\ -] '{print $2}')
+    if [[ $(vercmp "$VERSION" "5.2.0") -ge 0 ]]
+    then
+        local ARGS="-Fq"
+    else
+        local ARGS="Foq"
+    fi
+    pacman $ARGS /usr/bin/$CMD 2> /dev/null
+}
+
 # Parse options
 for opt in $*
 do
@@ -39,7 +51,7 @@ then
     command_not_found_handler(){
         local CMD=$1
         _cnf_pre_search_warn
-        local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
+        local PKGS=$(pacman_files_command $CMD)
         case $(echo $PKGS | wc -w) in
             0) _cnf_cmd_not_found ;;
             1) _cnf_print "\"$CMD\" may be found in package \"$PKGS\"" ;;
@@ -65,7 +77,7 @@ else
     command_not_found_handler(){
         local CMD=$1
         _cnf_pre_search_warn
-        local PKGS=$(pacman -Foq /usr/bin/$CMD 2> /dev/null)
+        local PKGS=$(pacman_files_command $CMD)
         case $(echo $PKGS | wc -w) in
             0) _cnf_cmd_not_found ;;
             1)
