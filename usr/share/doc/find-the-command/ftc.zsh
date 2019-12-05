@@ -5,7 +5,7 @@ _cnf_actions=('install' 'info' 'list files' 'list files (paged)')
 
 pacman_files_command(){
     local CMD=$1
-    local VERSION=$(pacman -Q pacman | awk -F[\ -] '{print $2}')
+    local VERSION=$(pacman -Q pacman | awk -F\[\ -\] '{print $2}')
     if [[ $(vercmp "$VERSION" "5.2.0") -ge 0 ]]
     then
         local ARGS="-Fq"
