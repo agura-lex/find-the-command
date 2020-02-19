@@ -1,6 +1,8 @@
 [Unit]
 Description=pacman files database update
 RequiresMountsFor=/var/lib/pacman/sync
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 Type=oneshot
