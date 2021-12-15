@@ -90,8 +90,7 @@ else
                 function __prompt_install --argument-names packages
                     read --prompt="echo \"Would you like to install this package? (y|n) \"" result
                     switch "$result"
-                    case 'y*'
-                    case 'Y*'
+                    case 'y*' 'Y*'
                         "$__cnf_asroot" pacman -S "$packages"
                     case '*'
                         return 127
